@@ -16,4 +16,8 @@ public interface ViewObserver {
 	public void changeThresholdsRequest(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax);
 
 	public void showThresholds();
+
+	public void toggleTorus();
+
+	public void togglePlay();
 }

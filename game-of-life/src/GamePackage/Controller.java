@@ -88,5 +88,24 @@ public class Controller implements ModelObserver, ViewObserver{
         JOptionPane.showMessageDialog(null, "Minimum Survival: " + model.getSurviveThresholdLow() + "\nMaximum Survival:" + model.getSurviveThresholdHigh() + "\nMinimum Birth: " + model.getBirthThresholdLow() + "\nMaximum Birth: " + model.getBirthThresholdHigh(), "Current Thresholds", JOptionPane.INFORMATION_MESSAGE);
 
 	}
+
+
+
+	@Override
+	public void toggleTorus() {
+		if (model.toggleTorus())
+			JOptionPane.showMessageDialog(null, "Torus mode is now on", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);
+		else
+			JOptionPane.showMessageDialog(null, "Torus mode is now off", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);
+
+	}
+
+
+
+	@Override
+	public void togglePlay() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

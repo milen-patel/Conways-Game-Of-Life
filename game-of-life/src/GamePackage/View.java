@@ -152,6 +152,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 				}
 			} else if (action.contentEquals("showThresholds")) {
 				o.showThresholds();
+			} else if (action.contentEquals("toggleTorus")) {
+				o.toggleTorus();
+			} else if (action.contentEquals("togglePlay")) {
+				o.togglePlay();
 			}
 		}
 	}
@@ -178,6 +182,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 			notifyObservers("changeThresholds");
 		} else if (e.getActionCommand().contentEquals("getThresholds")) {
 			notifyObservers("showThresholds");
+		} else if (e.getActionCommand().contentEquals("toggleTorus")) {
+			notifyObservers("toggleTorus");
+		} else if (e.getActionCommand().contentEquals("togglePlay")) {
+			notifyObservers("togglePlay");
 		}
 		
 	}
