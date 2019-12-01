@@ -2,6 +2,8 @@ package GamePackage;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,37 +31,54 @@ public class View extends JPanel implements ActionListener, SpotListener{
 	private JButton randomizeBoardButton;
 	private JButton nextMoveButton;
 	private JSpotBoard cellBoard;
-	
+	GridBagConstraints c;
+
 	/* Define Constructor */
 	public View () {
 		/* Handle observer */
 		observers = new ArrayList<ViewObserver>();
 		/* Set the layout */
 		//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.setLayout(new GridLayout(5, 1, 10, 10));
+		//this.setLayout(new GridLayout(5, 1, 10, 10));
+		this.setLayout(new GridBagLayout());
+	    c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
 		/* Add reset button */
 		resetButton = new JButton("Reset");
 		resetButton.setActionCommand("reset");
 		resetButton.addActionListener(this);
-		this.add(resetButton);
+		c.gridx = 0;
+		c.gridy = 0;
+		this.add(resetButton, c);
 		/* Add Resize Button */
 		resizeBoardButton = new JButton("Resize Board");
 		resizeBoardButton.setActionCommand("resize");
 		resizeBoardButton.addActionListener(this);
-		this.add(resizeBoardButton);
+		c.gridx = 1;
+		c.gridy = 0;
+		this.add(resizeBoardButton, c);
 		/* Add randomize board button */
 		randomizeBoardButton = new JButton("Randomize Board");
 		randomizeBoardButton.setActionCommand("randomize");
 		randomizeBoardButton.addActionListener(this);
-		this.add(randomizeBoardButton);
+		c.gridx = 2;
+		c.gridy = 0;
+		this.add(randomizeBoardButton, c);
 		/* Add next move button */
 		nextMoveButton = new JButton("Next Move");
 		nextMoveButton.setActionCommand("nextMove");
 		nextMoveButton.addActionListener(this);
-		this.add(nextMoveButton);
+		c.gridx = 3;
+		c.gridy = 0;
+		this.add(nextMoveButton, c);
 		/* Add Spot Board */
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 4;
+		c.anchor = GridBagConstraints.PAGE_END; //bottom of space
+
 		cellBoard = new JSpotBoard(10,10);
-		this.add(cellBoard);
+		this.add(cellBoard, c);
 		cellBoard.addSpotListener(this);
 		cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
 	}
@@ -149,7 +168,7 @@ public class View extends JPanel implements ActionListener, SpotListener{
 	public void regenerateModel(Model model) {
 		this.remove(cellBoard);
 		cellBoard = new JSpotBoard(model.getCurrentXSize()+1,model.getCurrentYSize()+1);
-		this.add(cellBoard);
+		this.add(cellBoard, c);
 		cellBoard.addSpotListener(this);
 		cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
 		updateDisplay(model);
