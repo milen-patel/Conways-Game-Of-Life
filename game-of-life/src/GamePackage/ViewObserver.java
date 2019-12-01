@@ -12,4 +12,8 @@ public interface ViewObserver {
 	public void randomizeBoard();
 
 	public void nextMove();
+
+	public void changeThresholdsRequest(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax);
+
+	public void showThresholds();
 }

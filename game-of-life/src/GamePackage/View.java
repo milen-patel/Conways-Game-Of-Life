@@ -30,6 +30,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 	private JButton resizeBoardButton;
 	private JButton randomizeBoardButton;
 	private JButton nextMoveButton;
+	private JButton changeThresholdsButton;
+	private JButton getThresholdsButton;
+	private JButton toggleTorusButton;
+	private JButton togglePlayButton;
 	private JSpotBoard cellBoard;
 	GridBagConstraints c;
 
@@ -71,9 +75,37 @@ public class View extends JPanel implements ActionListener, SpotListener{
 		c.gridx = 3;
 		c.gridy = 0;
 		this.add(nextMoveButton, c);
+		/* Add get threshold button */
+		getThresholdsButton = new JButton("See Thresholds");
+		getThresholdsButton.setActionCommand("getThresholds");
+		getThresholdsButton.addActionListener(this);
+		c.gridx=0;
+		c.gridy=1;
+		this.add(getThresholdsButton, c);
+		/* Add change threshold button */
+		changeThresholdsButton = new JButton("Change Thresholds");
+		changeThresholdsButton.setActionCommand("changeThresholds");
+		changeThresholdsButton.addActionListener(this);
+		c.gridx = 1;
+		c.gridy = 1;
+		this.add(changeThresholdsButton, c);
+		/* Add torus button */
+		toggleTorusButton = new JButton("Torus On/Off");
+		toggleTorusButton.setActionCommand("toggleTorus");
+		toggleTorusButton.addActionListener(this);
+		c.gridx = 2;
+		c.gridy = 1;
+		this.add(toggleTorusButton, c);
+		/* Add pause/play button */
+		togglePlayButton = new JButton("Play/Pause");
+		togglePlayButton.setActionCommand("togglePlay");
+		togglePlayButton.addActionListener(this);
+		c.gridx = 3;
+		c.gridy = 1;
+		this.add(togglePlayButton, c);
 		/* Add Spot Board */
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 2;
 		c.gridwidth = 4;
 		c.anchor = GridBagConstraints.PAGE_END; //bottom of space
 
@@ -106,6 +138,20 @@ public class View extends JPanel implements ActionListener, SpotListener{
 				o.randomizeBoard();
 			} else if (action.contentEquals("NextMove")) {
 				o.nextMove();
+			} else if (action.contentEquals("changeThresholds")) {
+				try {
+					int newSurviveMin = Integer.parseInt(JOptionPane.showInputDialog(null, "Survival Minimum"));
+					int newSurviveMax = Integer.parseInt(JOptionPane.showInputDialog(null, "Survival Maximum"));
+					int newBirthMin = Integer.parseInt(JOptionPane.showInputDialog(null, "Birth Minimum"));
+					int newBirthMax = Integer.parseInt(JOptionPane.showInputDialog(null, "Birth Maximum"));
+					o.changeThresholdsRequest(newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
+				} catch (Exception e) {
+					System.out.println(e);
+					 JOptionPane.showMessageDialog(null, "Bad threshold dimensions entered. No changes will be made.");
+					 return;
+				}
+			} else if (action.contentEquals("showThresholds")) {
+				o.showThresholds();
 			}
 		}
 	}
@@ -128,6 +174,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 			notifyObservers("RandomizeBoard");
 		} else if (e.getActionCommand().contentEquals("nextMove")) {
 			notifyObservers("NextMove");
+		} else if (e.getActionCommand().contentEquals("changeThresholds")) {
+			notifyObservers("changeThresholds");
+		} else if (e.getActionCommand().contentEquals("getThresholds")) {
+			notifyObservers("showThresholds");
 		}
 		
 	}

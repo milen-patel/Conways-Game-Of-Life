@@ -19,19 +19,31 @@ public class Model {
 	 */
 	boolean[][] gridModel;
 	private List<ModelObserver> observers;
+	private int surviveThresholdLow;
+	private int surviveThresholdHigh;
+	private int birthThresholdLow;
+	private int birthThresholdHigh;
+	private boolean isTorus;
 	
 	/* Create a constructor */
 	public Model() {
 		/* Instantiate 2d-array */
 		gridModel = new boolean[10][10];
 		observers = new ArrayList<ModelObserver>();
-
+		surviveThresholdLow = 2;
+		surviveThresholdHigh = 3;
+		birthThresholdLow = 3;
+		birthThresholdHigh = 3;
+		isTorus = false;
 	}
 	
 	/* Getters */
 	public int getCurrentXSize() { return gridModel[0].length-1; }
 	public int getCurrentYSize() { return gridModel.length-1; }
-	
+	public int getSurviveThresholdLow() { return surviveThresholdLow; }
+	public int getSurviveThresholdHigh() { return surviveThresholdHigh; }
+	public int getBirthThresholdLow() { return birthThresholdLow; }
+	public int getBirthThresholdHigh() { return birthThresholdHigh; }
 	/* Returns if the spot is alive
 	 * (x,y) is a spot in the array itself
 	 * (0,0) is the top left spot
@@ -62,38 +74,31 @@ public class Model {
 		/* Create a new grid model that will replace the old grid model */
 		boolean arr[][] = new boolean[this.gridModel.length][this.gridModel[0].length];
 		/* Loop over the entire board */
+		
 		for (int y=0; y<this.gridModel.length; y++) {
 			for (int x=0; x<this.gridModel[0].length; x++) {
 				System.out.println("(" + x + ", " + y + ")");
 				//1. Any live cell with fewer than two live neighbours dies, as if by underpopulation.
 				System.out.println("A");
-				if (getIsSpotAlive(x,y) && getNumNeighbors(x,y)<2) {
+				if (getIsSpotAlive(x,y) && getNumNeighbors(x,y)<this.surviveThresholdLow) {
 					arr[y][x] = false;
 					continue;
 				}
-				System.out.println("B");
-
 				//2. Any live cell with two or three live neighbours lives on to the next generation.
-				if (getIsSpotAlive(x,y) && (getNumNeighbors(x,y)==2 || getNumNeighbors(x,y)==3)) {
+				if (getIsSpotAlive(x,y) && (getNumNeighbors(x,y)<=this.surviveThresholdHigh && getNumNeighbors(x,y)>=this.surviveThresholdLow)) {
 					arr[y][x] = true;
 					continue;
 				}
-				System.out.println("C");
-
 				//3. Any live cell with more than three live neighbours dies, as if by overpopulation.
-				if (getIsSpotAlive(x,y) && getNumNeighbors(x,y)>3) {
+				if (getIsSpotAlive(x,y) && getNumNeighbors(x,y)>this.surviveThresholdHigh) {
 					arr[y][x] = false;
 					continue;
 				}
-				System.out.println("D");
-
 				//4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-				if (!getIsSpotAlive(x,y) && getNumNeighbors(x,y)==3) {
+				if (!getIsSpotAlive(x,y) && getNumNeighbors(x,y)>=this.birthThresholdLow && getNumNeighbors(x,y)<=this.birthThresholdHigh) {
 					arr[y][x] = true;
 					continue;
-				}
-				
-				System.out.println("E");
+				}				
 			}
 		}
 		
@@ -189,5 +194,19 @@ public class Model {
 		//System.out.println("Case 9");
 
 		return currentNeighbors;
+	}
+
+
+	public void changeThresholds(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax) {
+		if (newSurviveMin < 0 || newSurviveMax < 0 || newBirthMin < 0 || newBirthMax < 0)
+			throw new RuntimeException("Bad threshold parameters passed");
+		if (newSurviveMin > newSurviveMax)
+			throw new RuntimeException("Bad threshold parameters passed");
+		if (newBirthMin > newBirthMax)
+			throw new RuntimeException("Bad threshold parameters passed");
+		this.birthThresholdLow = newBirthMin;
+		this.birthThresholdHigh = newBirthMax;
+		this.surviveThresholdLow = newSurviveMin;
+		this.surviveThresholdHigh = newSurviveMax;
 	}
 }

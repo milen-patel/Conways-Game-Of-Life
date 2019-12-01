@@ -1,5 +1,7 @@
 package GamePackage;
 
+import javax.swing.JOptionPane;
+
 import SpotPackage.Spot;
 
 public class Controller implements ModelObserver, ViewObserver{
@@ -64,6 +66,27 @@ public class Controller implements ModelObserver, ViewObserver{
 	@Override
 	public void nextMove() {
 		model.makeNextMove();
+	}
+
+	@Override
+	public void changeThresholdsRequest(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax) {
+		try {
+			model.changeThresholds(newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
+
+		} catch (Exception e) {
+			System.out.println(e);
+			 JOptionPane.showMessageDialog(null, "Bad threshold dimensions entered. No changes will be made.");
+		}
+	}
+
+
+
+	@Override
+	public void showThresholds() {
+		System.out.println("TEst");
+		// TODO Auto-generated method stub
+        JOptionPane.showMessageDialog(null, "Minimum Survival: " + model.getSurviveThresholdLow() + "\nMaximum Survival:" + model.getSurviveThresholdHigh() + "\nMinimum Birth: " + model.getBirthThresholdLow() + "\nMaximum Birth: " + model.getBirthThresholdHigh(), "Current Thresholds", JOptionPane.INFORMATION_MESSAGE);
+
 	}
 	
 }
