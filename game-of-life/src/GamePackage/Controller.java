@@ -15,21 +15,10 @@ public class Controller implements ModelObserver, ViewObserver{
 		view.addViewObserver(this);
 	}
 
-	@Override
-	/* Observable method for the Model */
-	public void notify(String action) {
-		if (action.equals("spot_changed")) {
-			//Model tells us that a spot has changed, we tell view to repaint
-			view.updateDisplay(this.model);
-		} else if (action.contentEquals("newBoardSize")) {
-			view.regenerateModel(this.model);
-		}
-		
-	}
+	
 
 	@Override
 	public void resetButtonClicked() {
-		// TODO Auto-generated method stub
 		System.out.println("Observer sees that reset button was clicked");
 		System.out.println("Resetting model");
 		model.reset();
@@ -46,11 +35,35 @@ public class Controller implements ModelObserver, ViewObserver{
 
 	@Override
 	public void newBoardSizeRequested(int newXSize, int newYSize) {
-		model.changeXSize(newXSize);
-		model.changeYSize(newYSize);
+		model.changeBoardSize(newXSize, newYSize);
 		System.out.println("Controller requesting new board size");
 	}
 
-	
+	@Override
+	/* Observable method for the Model */
+	public void spotChanged() {
+		//Model tells us that a spot has changed, we tell view to repaint
+		view.updateDisplay(this.model);
+	}
+
+	@Override
+	/* Observable method for the Model */
+	public void newBoardSize() {
+		view.regenerateModel(this.model);
+	}
+
+
+
+	@Override
+	public void randomizeBoard() {
+		model.randomizeBoard();
+	}
+
+
+
+	@Override
+	public void nextMove() {
+		model.makeNextMove();
+	}
 	
 }

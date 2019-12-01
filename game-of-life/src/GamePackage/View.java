@@ -1,10 +1,14 @@
 package GamePackage;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,6 +26,8 @@ public class View extends JPanel implements ActionListener, SpotListener{
 	private List<ViewObserver> observers;
 	private JButton resetButton;
 	private JButton resizeBoardButton;
+	private JButton randomizeBoardButton;
+	private JButton nextMoveButton;
 	private JSpotBoard cellBoard;
 	
 	/* Define Constructor */
@@ -29,23 +35,33 @@ public class View extends JPanel implements ActionListener, SpotListener{
 		/* Handle observer */
 		observers = new ArrayList<ViewObserver>();
 		/* Set the layout */
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+		//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setLayout(new GridLayout(5, 1, 10, 10));
 		/* Add reset button */
 		resetButton = new JButton("Reset");
 		resetButton.setActionCommand("reset");
 		resetButton.addActionListener(this);
-		resetButton.setHorizontalAlignment(SwingConstants.LEFT);
 		this.add(resetButton);
 		/* Add Resize Button */
 		resizeBoardButton = new JButton("Resize Board");
 		resizeBoardButton.setActionCommand("resize");
 		resizeBoardButton.addActionListener(this);
 		this.add(resizeBoardButton);
+		/* Add randomize board button */
+		randomizeBoardButton = new JButton("Randomize Board");
+		randomizeBoardButton.setActionCommand("randomize");
+		randomizeBoardButton.addActionListener(this);
+		this.add(randomizeBoardButton);
+		/* Add next move button */
+		nextMoveButton = new JButton("Next Move");
+		nextMoveButton.setActionCommand("nextMove");
+		nextMoveButton.addActionListener(this);
+		this.add(nextMoveButton);
 		/* Add Spot Board */
-		cellBoard = new JSpotBoard(25,25);
+		cellBoard = new JSpotBoard(10,10);
 		this.add(cellBoard);
 		cellBoard.addSpotListener(this);
+		cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
 	}
 	
 	/* Observer methods */
@@ -67,6 +83,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 					 return;
 				 }
 				 
+			} else if (action.contentEquals("RandomizeBoard")) {
+				o.randomizeBoard();
+			} else if (action.contentEquals("NextMove")) {
+				o.nextMove();
 			}
 		}
 	}
@@ -85,6 +105,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 			notifyObservers("ResetButton");
 		} else if (e.getActionCommand().equals("resize")) {
 			notifyObservers("ResizeBoard");
+		} else if (e.getActionCommand().contentEquals("randomize")) {
+			notifyObservers("RandomizeBoard");
+		} else if (e.getActionCommand().contentEquals("nextMove")) {
+			notifyObservers("NextMove");
 		}
 		
 	}
@@ -124,9 +148,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 
 	public void regenerateModel(Model model) {
 		this.remove(cellBoard);
-		cellBoard = new JSpotBoard(model.getCurrentXSize(),model.getCurrentYSize());
+		cellBoard = new JSpotBoard(model.getCurrentXSize()+1,model.getCurrentYSize()+1);
 		this.add(cellBoard);
-		cellBoard.addSpotListener(this);	
+		cellBoard.addSpotListener(this);
+		cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
 		updateDisplay(model);
 	}
 	

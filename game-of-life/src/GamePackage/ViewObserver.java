@@ -8,4 +8,8 @@ public interface ViewObserver {
 	public void spotClicked(Spot s);
 
 	public void newBoardSizeRequested(int newXSize, int newYSize);
+
+	public void randomizeBoard();
+
+	public void nextMove();
 }
