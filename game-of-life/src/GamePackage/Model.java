@@ -67,7 +67,7 @@ public class Model {
 	
 	public void toggleSpot(int x, int y) {
 		gridModel[y][x] = !gridModel[y][x];
-		/* Notify Observesrs */
+		/* Notify Observers */
 		notifyObservers("spot_changed");
 	}
 	
@@ -78,24 +78,22 @@ public class Model {
 		
 		for (int y=0; y<this.gridModel.length; y++) {
 			for (int x=0; x<this.gridModel[0].length; x++) {
-				System.out.println("(" + x + ", " + y + ")");
-				//1. Any live cell with fewer than two live neighbours dies, as if by underpopulation.
-				System.out.println("A");
+				//1. Any live cell with fewer than two live neighbors dies, as if by under-population.
 				if (getIsSpotAlive(x,y,gridModel) && getNumNeighbors(x,y)<this.surviveThresholdLow) {
 					arr[y][x] = false;
 					continue;
 				}
-				//2. Any live cell with two or three live neighbours lives on to the next generation.
+				//2. Any live cell with two or three live neighbors lives on to the next generation.
 				if (getIsSpotAlive(x,y,gridModel) && (getNumNeighbors(x,y)<=this.surviveThresholdHigh && getNumNeighbors(x,y)>=this.surviveThresholdLow)) {
 					arr[y][x] = true;
 					continue;
 				}
-				//3. Any live cell with more than three live neighbours dies, as if by overpopulation.
+				//3. Any live cell with more than three live neighbors dies, as if by over-population.
 				if (getIsSpotAlive(x,y,gridModel) && getNumNeighbors(x,y)>this.surviveThresholdHigh) {
 					arr[y][x] = false;
 					continue;
 				}
-				//4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+				//4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
 				if (!getIsSpotAlive(x,y,gridModel) && getNumNeighbors(x,y)>=this.birthThresholdLow && getNumNeighbors(x,y)<=this.birthThresholdHigh) {
 					arr[y][x] = true;
 					continue;
@@ -146,51 +144,13 @@ public class Model {
 				gridModel[x][y] = false;
 			}
 		}
-		//System.out.println(Arrays.deepToString(gridModel));
 		notifyObservers("spot_changed");
 	}
 	
 	public int getNumNeighbors(int x, int y) {
-		/* Handle Torus Mode implementation */
-		//if (isTorus) {
-		//	// If it is Torus then there are two conditions
-		//	/* Case 1: X is on the left side of the board */
-		//	if (x == this.gridModel[0].length-1) {
-		//		x = 0;
-		//	} else if (x == 0) {
-		//		/* Case 2: X is on the right side of the board */
-		//		x = this.gridModel[0].length-1;
-		//	}
-		//}
-		
-		/* A less effective way of handling torus mode 
-		 * For this method, paste 3 of the boards next to each other to mimick wrapping
-		 * And then in the method, only refer to this temporary board
-		 */
-		/*
-		// Step 1: Shift our x parameter so we are looking at the middle of the board
-		x += this.gridModel[0].length;
-		// Step 2: Create new boolean[][] with correct dimensions
-		boolean[][] tempArr = new boolean[this.gridModel.length][this.gridModel[0].length*3];
-		// Step 3: Population boolean[][]
-		for (int tempy=0; tempy<gridModel.length; tempy++) {
-			for (int tempx=0; tempx<gridModel[0].length; tempx++) {
-				tempArr[tempy][tempx] = this.gridModel[tempy][tempx];
-			}
-		}
-		for (int tempy=0; tempy<gridModel.length; tempy++) {
-			for (int tempx=this.gridModel[0].length; tempx<2*gridModel[0].length; tempx++) {
-				tempArr[tempy][tempx] = this.gridModel[tempy][tempx-this.gridModel[0].length];
-			}
-		}
-		for (int tempy=0; tempy<gridModel.length; tempy++) {
-			for (int tempx=2*this.gridModel[0].length; tempx<3*gridModel[0].length; tempx++) {
-				tempArr[tempy][tempx] = this.gridModel[tempy][tempx-2*this.gridModel[0].length];
-			}
-		}
-		*/
-		boolean[][] tempArr = this.gridModel;
+		/* Temporary variable to hold total count */
 		int currentNeighbors = 0;
+		
 		//Check directly above, if possible
 		if (y != 0 && getIsSpotAlive(x,y-1))
 			currentNeighbors++;
@@ -200,7 +160,6 @@ public class Model {
 			currentNeighbors++;
 
 		//Check directly to the right, if possible
-		System.out.println("Curr x vs size:"+  x + " : " + getCurrentXSize());
 		if (isTorus && x == getCurrentXSize() && getIsSpotAlive(0,y))
 			currentNeighbors++; //NEW
 			
@@ -208,7 +167,7 @@ public class Model {
 			currentNeighbors++;
 
 		//Check directly to the left, if possible
-		if (isTorus && x==0 && getIsSpotAlive(tempArr[0].length-1,y))
+		if (isTorus && x==0 && getIsSpotAlive(getCurrentXSize(),y))
 			currentNeighbors++; //NEW
 		
 		if (x != 0 && getIsSpotAlive(x-1,y))
@@ -222,21 +181,21 @@ public class Model {
 			currentNeighbors++;
 
 		//Check the diagonal Top Left spot, if possible
-		if (isTorus && x==0 && y != 0 && getIsSpotAlive(gridModel[0].length-1,y-1))
+		if (isTorus && x==0 && y != 0 && getIsSpotAlive(getCurrentXSize(),y-1))
 			currentNeighbors++; //NEW
 		
 		if (x != 0 && y != 0 && getIsSpotAlive(x-1,y-1))
 			currentNeighbors++;
 
 		//Check the diagonal Bottom Right, if possible
-		if (isTorus && y != getCurrentYSize() &&x==gridModel[0].length-1 && getIsSpotAlive(0,y+1))
+		if (isTorus && y != getCurrentYSize() &&x==getCurrentXSize() && getIsSpotAlive(0,y+1))
 			currentNeighbors++; //NEW
 		
 		if (x != getCurrentXSize() && y != getCurrentYSize() && getIsSpotAlive(x+1,y+1))
 			currentNeighbors++;
 
 		//Check the diagonal Bottom Left, if possible
-		if (isTorus && x==0 && y != getCurrentYSize() && getIsSpotAlive(gridModel[0].length-1,y+1))
+		if (isTorus && x==0 && y != getCurrentYSize() && getIsSpotAlive(getCurrentXSize(),y+1))
 			currentNeighbors++;
 		
 		if (x != 0 && y != getCurrentYSize() && getIsSpotAlive(x-1,y+1))
@@ -247,12 +206,14 @@ public class Model {
 
 
 	public void changeThresholds(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax) {
+		/* Check input first */
 		if (newSurviveMin < 0 || newSurviveMax < 0 || newBirthMin < 0 || newBirthMax < 0)
 			throw new RuntimeException("Bad threshold parameters passed");
 		if (newSurviveMin > newSurviveMax)
 			throw new RuntimeException("Bad threshold parameters passed");
 		if (newBirthMin > newBirthMax)
 			throw new RuntimeException("Bad threshold parameters passed");
+		/* Now that input has been validated, change values */
 		this.birthThresholdLow = newBirthMin;
 		this.birthThresholdHigh = newBirthMax;
 		this.surviveThresholdLow = newSurviveMin;
