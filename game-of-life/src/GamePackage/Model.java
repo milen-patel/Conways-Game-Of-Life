@@ -167,6 +167,7 @@ public class Model {
 		 * For this method, paste 3 of the boards next to each other to mimick wrapping
 		 * And then in the method, only refer to this temporary board
 		 */
+		/*
 		// Step 1: Shift our x parameter so we are looking at the middle of the board
 		x += this.gridModel[0].length;
 		// Step 2: Create new boolean[][] with correct dimensions
@@ -187,38 +188,58 @@ public class Model {
 				tempArr[tempy][tempx] = this.gridModel[tempy][tempx-2*this.gridModel[0].length];
 			}
 		}
+		*/
+		boolean[][] tempArr = this.gridModel;
 		int currentNeighbors = 0;
 		//Check directly above, if possible
-		if (y != 0 && getIsSpotAlive(x,y-1,tempArr))
+		if (y != 0 && getIsSpotAlive(x,y-1))
 			currentNeighbors++;
 
 		//Check directly below, if possible
-		if (y != getCurrentYSize() && getIsSpotAlive(x,y+1,tempArr))
+		if (y != getCurrentYSize() && getIsSpotAlive(x,y+1))
 			currentNeighbors++;
 
 		//Check directly to the right, if possible
 		System.out.println("Curr x vs size:"+  x + " : " + getCurrentXSize());
-		if (x != getCurrentXSize() && getIsSpotAlive(x+1,y,tempArr))
+		if (isTorus && x == getCurrentXSize() && getIsSpotAlive(0,y))
+			currentNeighbors++; //NEW
+			
+		if (x != getCurrentXSize() && getIsSpotAlive(x+1,y))
 			currentNeighbors++;
 
 		//Check directly to the left, if possible
-		if (x != 0 && getIsSpotAlive(x-1,y,tempArr))
+		if (isTorus && x==0 && getIsSpotAlive(tempArr[0].length-1,y))
+			currentNeighbors++; //NEW
+		
+		if (x != 0 && getIsSpotAlive(x-1,y))
 			currentNeighbors++;
 
 		//Check the diagonal Top Right spot, if possible
-		if (x != getCurrentXSize() && y != 0 && getIsSpotAlive(x+1,y-1,tempArr))
+		if (isTorus && y != 0 && x==getCurrentXSize() && getIsSpotAlive(0,y-1))
+			currentNeighbors++; //NEW
+		
+		if (x != getCurrentXSize() && y != 0 && getIsSpotAlive(x+1,y-1))
 			currentNeighbors++;
 
 		//Check the diagonal Top Left spot, if possible
-		if (x != 0 && y != 0 && getIsSpotAlive(x-1,y-1,tempArr))
+		if (isTorus && x==0 && y != 0 && getIsSpotAlive(gridModel[0].length-1,y-1))
+			currentNeighbors++; //NEW
+		
+		if (x != 0 && y != 0 && getIsSpotAlive(x-1,y-1))
 			currentNeighbors++;
 
 		//Check the diagonal Bottom Right, if possible
-		if (x != getCurrentXSize() && y != getCurrentYSize() && getIsSpotAlive(x+1,y+1,tempArr))
+		if (isTorus && y != getCurrentYSize() &&x==gridModel[0].length-1 && getIsSpotAlive(0,y+1))
+			currentNeighbors++; //NEW
+		
+		if (x != getCurrentXSize() && y != getCurrentYSize() && getIsSpotAlive(x+1,y+1))
 			currentNeighbors++;
 
 		//Check the diagonal Bottom Left, if possible
-		if (x != 0 && y != getCurrentYSize() && getIsSpotAlive(x-1,y+1,tempArr))
+		if (isTorus && x==0 && y != getCurrentYSize() && getIsSpotAlive(gridModel[0].length-1,y+1))
+			currentNeighbors++;
+		
+		if (x != 0 && y != getCurrentYSize() && getIsSpotAlive(x-1,y+1))
 			currentNeighbors++;
 
 		return currentNeighbors;
