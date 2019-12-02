@@ -26,7 +26,7 @@ public class Controller implements ModelObserver, ViewObserver{
 
 	@Override
 	public void spotClicked(int x, int y) {
-		System.out.println("View has notified controller that a spot has been clicked");
+		System.out.println("View has notified controller that a spot has been clicked at (" + x +", " + y + ")");
 		model.toggleSpot(x, y);
 		System.out.println("The clicked spot has # neighbors: " + model.getNumNeighbors(x, y));
 	}

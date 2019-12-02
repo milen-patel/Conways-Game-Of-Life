@@ -35,23 +35,28 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 		super.paintComponent(g);
 
 		Rectangle r = getBounds();
-		this.setPreferredSize(new Dimension((int)(r.getWidth()),(int) (r.getHeight())));
+		//this.setPreferredSize(new Dimension((int)(r.getWidth()),(int) (r.getHeight())));
 		
 		/* If we have nothing to visualize, then move on */
 		if (arr == null) {
 			return;
 		}
-		int eachCellXWidth = (int) (r.getWidth()/arr[0].length);
-		int eachCellYWidth = (int) (r.getHeight()/arr.length);
-		
+		//WORKS BETTER WHEN THESE ARE INTS
+		double eachCellXWidth =  (r.getWidth()/arr[0].length);
+		double eachCellYWidth =  (r.getHeight()/arr.length);
+		System.out.println("Widget will use x width: " + eachCellXWidth * arr[0].length);
+		System.out.println("Widget will use y height: " + eachCellYWidth * arr.length);
+		System.out.println("Widget has potential to use width: " + r.getWidth() + ", height: " + r.getHeight());
 		g2d = (Graphics2D) g.create();
 		g2d.setColor(Color.BLACK);
 		g2d.setStroke(new BasicStroke(1));
 		
 		for (int y=0; y<arr.length; y++) {
 			for (int x=0; x<arr[0].length; x++) {
-				//Draw the rectangles
-				g2d.drawRect((int)(x*eachCellXWidth), (int)(y*eachCellYWidth), (int)(eachCellXWidth), (int)(eachCellYWidth));
+				//Draw the rectangles when we need to
+				if (arr[0].length < 350 && arr.length < 350) {
+					g2d.drawRect((int)(x*eachCellXWidth), (int)(y*eachCellYWidth), (int)(eachCellXWidth), (int)(eachCellYWidth));
+				}
 				//Draw oval when needed
 				if (arr[y][x]) {
 					g2d.fillOval((int)(x*eachCellXWidth), (int)(y*eachCellYWidth), (int)(eachCellXWidth), (int)(eachCellYWidth));
@@ -63,10 +68,10 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 	
 	public Dimension convertPointToCoordinate(int x, int y) {
 		Rectangle r = getBounds();
-		int eachCellXWidth = (int) (r.getWidth()/arr[0].length);
-		int eachCellYWidth = (int) (r.getHeight()/arr.length);
+		double eachCellXWidth =  (r.getWidth()/arr[0].length);
+		double eachCellYWidth =  (r.getHeight()/arr.length);
 		
-		return new Dimension(x/eachCellXWidth, y/eachCellYWidth);
+		return new Dimension((int) (x/eachCellXWidth), (int) (y/eachCellYWidth));
 	}
 	
 
