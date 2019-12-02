@@ -11,7 +11,7 @@ I have provided all the implementation as requested on the Sakai.
 All Features:
 
 Ability to change the size of the field from 10x10 up to 500x500.
-Ability to manually set / clear any cell in order to set up patterns
+\n\nAbility to manually set / clear any cell in order to set up patterns
 Ability to clear the entire field.
 Ability to fill the field randomly.
 Ability to advance the game by pressing a button.
