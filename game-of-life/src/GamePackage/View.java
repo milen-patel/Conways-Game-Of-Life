@@ -17,9 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import SpotPackage.JSpotBoard;
-import SpotPackage.Spot;
-import SpotPackage.SpotListener;
 
 public class View extends JPanel implements ActionListener, GridVisualizerWidgetObserver{
 	/* Define instance variables */
@@ -32,7 +29,6 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	private JButton getThresholdsButton;
 	private JButton toggleTorusButton;
 	private JButton togglePlayButton;
-	private JSpotBoard cellBoard;
 	private GridVisualizerWidget x;
 	GridBagConstraints c;
 	/* Define Constructor */
@@ -114,11 +110,6 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		this.add(x, c);
 		x.repaint();
 		
-	
-		//cellBoard = new JSpotBoard(10,10);
-		//this.add(cellBoard, c);
-		//cellBoard.addSpotListener(this);
-		//cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
 	}
 	
 	/* Observer methods */

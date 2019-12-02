@@ -1,6 +1,5 @@
 package GamePackage;
 
-import SpotPackage.Spot;
 
 public interface ViewObserver {
 	public void resetButtonClicked();

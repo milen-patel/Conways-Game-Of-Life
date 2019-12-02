@@ -2,7 +2,6 @@ package GamePackage;
 
 import javax.swing.JOptionPane;
 
-import SpotPackage.Spot;
 
 public class Controller implements ModelObserver, ViewObserver{
 	/* Instance variables */
