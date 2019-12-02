@@ -41,8 +41,8 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 		if (arr == null) {
 			return;
 		}
-		double eachCellXWidth = (r.getWidth()/arr[0].length);
-		double eachCellYWidth = (r.getHeight()/arr.length);
+		int eachCellXWidth = (int) (r.getWidth()/arr[0].length);
+		int eachCellYWidth = (int) (r.getHeight()/arr.length);
 		
 		g2d = (Graphics2D) g.create();
 		g2d.setColor(Color.BLACK);
@@ -73,6 +73,8 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Dimension temp = convertPointToCoordinate(e.getX(), e.getY());
+		if (temp.width < 0 || temp.height < 0 || temp.width >= arr[0].length || temp.height >= arr.length)
+			return; //Temp solution
 		notifyObservers("button_clicked", temp.width, temp.height);
 		//TODO dont use dimensions make a new class
 	}
