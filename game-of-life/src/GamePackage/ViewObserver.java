@@ -5,7 +5,7 @@ import SpotPackage.Spot;
 public interface ViewObserver {
 	public void resetButtonClicked();
 
-	public void spotClicked(Spot s);
+	public void spotClicked(int x, int y);
 
 	public void newBoardSizeRequested(int newXSize, int newYSize);
 

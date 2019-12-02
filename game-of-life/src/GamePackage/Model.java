@@ -5,7 +5,6 @@ package GamePackage;
 // TODO: Why does repainting print "Repainting Display" twice
 // TODO: Make console print more detailed information
 // TODO: Make 'Event' based classes instead of just passing strings
-// TODO: Change layout to gridbag layout
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +44,7 @@ public class Model {
 	public int getBirthThresholdLow() { return birthThresholdLow; }
 	public int getBirthThresholdHigh() { return birthThresholdHigh; }
 	public boolean getIsTorus() { return isTorus; }
+	public boolean[][] getBoard() { return this.gridModel.clone(); }
 	/* Returns if the spot is alive
 	 * (x,y) is a spot in the array itself
 	 * (0,0) is the top left spot
@@ -71,7 +71,7 @@ public class Model {
 		notifyObservers("spot_changed");
 	}
 	
-	public void makeNextMove() {
+	public synchronized void makeNextMove() {
 		/* Create a new grid model that will replace the old grid model */
 		boolean arr[][] = new boolean[this.gridModel.length][this.gridModel[0].length];
 		/* Loop over the entire board */
@@ -139,9 +139,9 @@ public class Model {
 	}
 
 	public void reset() {
-		for(int x=0; x<gridModel.length;x++) {
-			for(int y=0; y<gridModel[x].length; y++) {
-				gridModel[x][y] = false;
+		for(int y=0; y<gridModel.length;y++) {
+			for(int x=0; x<gridModel[0].length; x++) {
+				gridModel[y][x] = false;
 			}
 		}
 		notifyObservers("spot_changed");

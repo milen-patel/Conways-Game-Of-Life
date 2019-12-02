@@ -4,26 +4,24 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import SpotPackage.JSpotBoard;
 import SpotPackage.Spot;
 import SpotPackage.SpotListener;
 
-public class View extends JPanel implements ActionListener, SpotListener{
+public class View extends JPanel implements ActionListener, FasterViewObserver{
 	/* Define instance variables */
 	private List<ViewObserver> observers;
 	private JButton resetButton;
@@ -35,18 +33,17 @@ public class View extends JPanel implements ActionListener, SpotListener{
 	private JButton toggleTorusButton;
 	private JButton togglePlayButton;
 	private JSpotBoard cellBoard;
+	private FasterView x;
 	GridBagConstraints c;
-
 	/* Define Constructor */
 	public View () {
 		/* Handle observer */
 		observers = new ArrayList<ViewObserver>();
 		/* Set the layout */
-		//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		//this.setLayout(new GridLayout(5, 1, 10, 10));
 		this.setLayout(new GridBagLayout());
 	    c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
+		this.setPreferredSize(new Dimension(1000, 1000));
 		/* Add reset button */
 		resetButton = new JButton("Reset");
 		resetButton.setActionCommand("reset");
@@ -108,11 +105,20 @@ public class View extends JPanel implements ActionListener, SpotListener{
 		c.gridy = 2;
 		c.gridwidth = 4;
 		c.anchor = GridBagConstraints.PAGE_END; //bottom of space
-
-		cellBoard = new JSpotBoard(10,10);
-		this.add(cellBoard, c);
-		cellBoard.addSpotListener(this);
-		cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+		System.out.println("Width:" + getWidth());
+		System.out.println("Height:" + getHeight());
+		x = new FasterView();
+		x.setPreferredSize(new Dimension(1000,800));
+		x.repaint(new boolean[10][10]);
+		x.addObserver(this);
+		this.add(x, c);
+		x.repaint();
+		
+	
+		//cellBoard = new JSpotBoard(10,10);
+		//this.add(cellBoard, c);
+		//cellBoard.addSpotListener(this);
+		//cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
 	}
 	
 	/* Observer methods */
@@ -160,10 +166,10 @@ public class View extends JPanel implements ActionListener, SpotListener{
 		}
 	}
 	
-	public void notifyObservers(String action, Spot s) {
+	public void notifyObservers(String action, int x, int y) {
 		for (ViewObserver o : observers) {
 			if (action.equals("spot clicked")) {
-				o.spotClicked(s);
+				o.spotClicked(x, y);
 			} 
 		}
 	}
@@ -190,47 +196,56 @@ public class View extends JPanel implements ActionListener, SpotListener{
 		
 	}
 
-	@Override
-	public void spotClicked(Spot spot) {
-		// TODO Auto-generated method stub
-		notifyObservers("spot clicked", spot);
+	//@Override
+	//public void spotClicked(Spot spot) {
+	//	// TODO Auto-generated method stub
+	//	notifyObservers("spot clicked", spot);
 
-	}
+	//}
 
-	@Override
-	public void spotEntered(Spot spot) {
-		spot.highlightSpot();	
-	}
+	//@Override
+	//public void spotEntered(Spot spot) {
+	//	spot.highlightSpot();	
+	//}
 
-	@Override
-	public void spotExited(Spot spot) {
-		spot.unhighlightSpot();
+	//@Override
+	//public void spotExited(Spot spot) {
+	//	spot.unhighlightSpot();
 		// TODO Auto-generated method stub
 		
-	}
+	//}
 	
 	public void updateDisplay(Model model) {
 		System.out.println("Repainting display");
 		//Loop over the entire JSpotBoard
-		for (Spot s: cellBoard) {
-			if (model.getIsSpotAlive(s.getSpotX(), s.getSpotY())) {
-				cellBoard.getSpotAt(s.getSpotX(), s.getSpotY()).setSpot();
-			} else {
-				cellBoard.getSpotAt(s.getSpotX(), s.getSpotY()).clearSpot();
-			}
-		}
-		this.revalidate();
-		this.repaint();
+		//for (Spot s: cellBoard) {
+		//	if (model.getIsSpotAlive(s.getSpotX(), s.getSpotY())) {
+		//		cellBoard.getSpotAt(s.getSpotX(), s.getSpotY()).setSpot();
+		//	} else {
+		//		cellBoard.getSpotAt(s.getSpotX(), s.getSpotY()).clearSpot();
+		//	}
+		//}
+		x.repaint(model.getBoard());
+	//	this.revalidate();
+	//	this.repaint();
 	}
 
 	public void regenerateModel(Model model) {
-		this.remove(cellBoard);
-		cellBoard = new JSpotBoard(model.getCurrentXSize()+1,model.getCurrentYSize()+1);
-		this.add(cellBoard, c);
-		cellBoard.addSpotListener(this);
-		cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
-		updateDisplay(model);
+		//this.remove(cellBoard);
+		//cellBoard = new JSpotBoard(model.getCurrentXSize()+1,model.getCurrentYSize()+1);
+		//this.add(cellBoard, c);
+		//cellBoard.addSpotListener(this);
+		//cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+		//updateDisplay(model);
+		x.repaint(model.getBoard());
+	}
+
+	@Override
+	public void buttonClicked(int x, int y) {
+		notifyObservers("spot clicked", x, y);
 	}
 	
+ 
 	
 }
+

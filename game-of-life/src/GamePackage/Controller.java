@@ -28,11 +28,11 @@ public class Controller implements ModelObserver, ViewObserver{
 	}
 
 	@Override
-	public void spotClicked(Spot s) {
+	public void spotClicked(int x, int y) {
 		System.out.println("View has notified controller that a spot has been clicked");
 		System.out.println("Controller notifying the model");
-		model.toggleSpot(s.getSpotX(), s.getSpotY());
-		System.out.println("The clicked spot has # neighbors: " + model.getNumNeighbors(s.getSpotX(), s.getSpotY()));
+		model.toggleSpot(x, y);
+		System.out.println("The clicked spot has # neighbors: " + model.getNumNeighbors(x, y));
 	}
 
 	@Override
@@ -83,10 +83,7 @@ public class Controller implements ModelObserver, ViewObserver{
 
 	@Override
 	public void showThresholds() {
-		System.out.println("TEst");
-		// TODO Auto-generated method stub
         JOptionPane.showMessageDialog(null, "Minimum Survival: " + model.getSurviveThresholdLow() + "\nMaximum Survival:" + model.getSurviveThresholdHigh() + "\nMinimum Birth: " + model.getBirthThresholdLow() + "\nMaximum Birth: " + model.getBirthThresholdHigh(), "Current Thresholds", JOptionPane.INFORMATION_MESSAGE);
-
 	}
 
 
@@ -97,15 +94,14 @@ public class Controller implements ModelObserver, ViewObserver{
 			JOptionPane.showMessageDialog(null, "Torus mode is now on", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);
 		else
 			JOptionPane.showMessageDialog(null, "Torus mode is now off", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);
-
+		//TODO: Make the view handle the JOption panes
 	}
-
-
 
 	@Override
 	public void togglePlay() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("starting new thread");
+		(new BackgroundRunner(this.model, 500.0)).start();
 	}
+	
 	
 }
