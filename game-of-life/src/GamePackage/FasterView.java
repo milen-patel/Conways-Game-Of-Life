@@ -105,14 +105,16 @@ public class FasterView extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		//System.out.println("mouse entered");
+		//System.out.println("mouse entered" + e.getX());
 		//Dimension temp = convertPointToCoordinate(e.getX(), e.getY());
 		//Rectangle r = getBounds();
-		//int eachCellXWidth = (int) (r.getWidth()/model.getCurrentXSize()+1);
-		//int eachCellYWidth = (int) (r.getHeight()/model.getCurrentYSize()+1);
+		//int eachCellXWidth = (int) (r.getWidth()/arr[0].length);
+		//int eachCellYWidth = (int) (r.getHeight()/arr.length);
 		//g2d.setColor(Color.YELLOW);
-		//g2d.drawRect((int) (temp.getWidth()*eachCellXWidth+30), (int) (temp.getHeight()*eachCellYWidth), eachCellXWidth, eachCellYWidth);
+		//g2d.fillRect((int) (temp.getWidth()*eachCellXWidth+30), (int) (temp.getHeight()*eachCellYWidth), eachCellXWidth, eachCellYWidth);
 		//repaint();
+		//TODO needs to highlight spot
+		
 	}
 
 	@Override

@@ -8,6 +8,8 @@ public class Controller implements ModelObserver, ViewObserver{
 	/* Instance variables */
 	private Model model;
 	private View view;
+	boolean isAutoRunning;
+	private BackgroundRunner currentThread;
 	
 	/* Constructor */
 	public Controller(Model model, View view) {
@@ -99,8 +101,22 @@ public class Controller implements ModelObserver, ViewObserver{
 
 	@Override
 	public void togglePlay() {
-		System.out.println("starting new thread");
-		(new BackgroundRunner(this.model, 500.0)).start();
+		if (isAutoRunning) {
+			currentThread.terminate();
+			currentThread = null;
+			isAutoRunning = false;
+			return;
+		} else {
+			double pauseTime = Double.parseDouble(JOptionPane.showInputDialog(null,"Enter thread duration between 10-1000 ms"));
+			if (pauseTime < 10 || pauseTime > 1000) {
+				JOptionPane.showMessageDialog(null, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			isAutoRunning = true;
+			currentThread = new BackgroundRunner(this.model, pauseTime);
+			currentThread.start();
+		}
+		
 	}
 	
 	
