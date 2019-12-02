@@ -13,13 +13,13 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public class FasterView extends JPanel implements MouseListener {
+public class GridVisualizer extends JPanel implements MouseListener {
 	private boolean[][] arr;
-	private List<FasterViewObserver> observers;
+	private List<GridVisualizerWidgetObserver> observers;
 
 	Graphics2D g2d;
-	public FasterView() {
-		observers = new ArrayList<FasterViewObserver>();
+	public GridVisualizer() {
+		observers = new ArrayList<GridVisualizerWidgetObserver>();
 		this.addMouseListener(this);
 		repaint();		
 	}
@@ -123,10 +123,10 @@ public class FasterView extends JPanel implements MouseListener {
 		
 	}
 	
-	public void addObserver(FasterViewObserver o) { observers.add(o); }
-	public void removeObserver(FasterViewObserver o) { observers.remove(o); }
+	public void addObserver(GridVisualizerWidgetObserver o) { observers.add(o); }
+	public void removeObserver(GridVisualizerWidgetObserver o) { observers.remove(o); }
 	public void notifyObservers(String action, int x, int y) {
-		for (FasterViewObserver o : observers) {
+		for (GridVisualizerWidgetObserver o : observers) {
 			if (action.contentEquals("button_clicked")) {
 				o.buttonClicked(x, y);
 			}

@@ -21,7 +21,7 @@ import SpotPackage.JSpotBoard;
 import SpotPackage.Spot;
 import SpotPackage.SpotListener;
 
-public class View extends JPanel implements ActionListener, FasterViewObserver{
+public class View extends JPanel implements ActionListener, GridVisualizerWidgetObserver{
 	/* Define instance variables */
 	private List<ViewObserver> observers;
 	private JButton resetButton;
@@ -33,7 +33,7 @@ public class View extends JPanel implements ActionListener, FasterViewObserver{
 	private JButton toggleTorusButton;
 	private JButton togglePlayButton;
 	private JSpotBoard cellBoard;
-	private FasterView x;
+	private GridVisualizer x;
 	GridBagConstraints c;
 	/* Define Constructor */
 	public View () {
@@ -107,7 +107,7 @@ public class View extends JPanel implements ActionListener, FasterViewObserver{
 		c.anchor = GridBagConstraints.PAGE_END; //bottom of space
 		System.out.println("Width:" + getWidth());
 		System.out.println("Height:" + getHeight());
-		x = new FasterView();
+		x = new GridVisualizer();
 		x.setPreferredSize(new Dimension(1000,800));
 		x.repaint(new boolean[10][10]);
 		x.addObserver(this);
@@ -248,4 +248,3 @@ public class View extends JPanel implements ActionListener, FasterViewObserver{
  
 	
 }
-

@@ -1,5 +1,5 @@
 package GamePackage;
 
-public interface FasterViewObserver {
+public interface GridVisualizerWidgetObserver {
 	public void buttonClicked(int x, int y);
 }
