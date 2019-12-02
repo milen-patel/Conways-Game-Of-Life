@@ -13,12 +13,12 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public class GridVisualizer extends JPanel implements MouseListener {
+public class GridVisualizerWidget extends JPanel implements MouseListener {
 	private boolean[][] arr;
 	private List<GridVisualizerWidgetObserver> observers;
 
 	Graphics2D g2d;
-	public GridVisualizer() {
+	public GridVisualizerWidget() {
 		observers = new ArrayList<GridVisualizerWidgetObserver>();
 		this.addMouseListener(this);
 		repaint();		

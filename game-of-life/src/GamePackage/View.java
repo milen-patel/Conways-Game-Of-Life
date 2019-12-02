@@ -33,7 +33,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	private JButton toggleTorusButton;
 	private JButton togglePlayButton;
 	private JSpotBoard cellBoard;
-	private GridVisualizer x;
+	private GridVisualizerWidget x;
 	GridBagConstraints c;
 	/* Define Constructor */
 	public View () {
@@ -107,7 +107,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.anchor = GridBagConstraints.PAGE_END; //bottom of space
 		System.out.println("Width:" + getWidth());
 		System.out.println("Height:" + getHeight());
-		x = new GridVisualizer();
+		x = new GridVisualizerWidget();
 		x.setPreferredSize(new Dimension(1000,800));
 		x.repaint(new boolean[10][10]);
 		x.addObserver(this);
