@@ -1,4 +1,4 @@
-Execute the GameRunner.java class to create a new instance of the simulation
+**Execute the GameRunner.java class to create a new instance of the simulation**
 
 I have provided all the implementation as requested on the Sakai.
 -By default, there is a 10x10 grid
@@ -8,7 +8,7 @@ I have provided all the implementation as requested on the Sakai.
 -The code has been implemented using MVC Architecture
 
 
-All Features:  
+**All Features:**
 
 +Ability to change the size of the field from 10x10 up to 500x500.  
 +Ability to manually set / clear any cell in order to set up patterns. 
