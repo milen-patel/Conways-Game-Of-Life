@@ -32,15 +32,12 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 	//TODO Make the board resize itself when the screen is resized
 
 	public void paintComponent(Graphics g) {
-		// Super class paintComponent will take care of 
-		// painting the background.
 		super.paintComponent(g);
 
 		Rectangle r = getBounds();
-		//System.out.println("Inner View Width: " + r.getWidth());
-		//System.out.println("Inner View Height: " + r.getHeight());
 		this.setPreferredSize(new Dimension((int)(r.getWidth()),(int) (r.getHeight())));
 		
+		/* If we have nothing to visualize, then move on */
 		if (arr == null) {
 			return;
 		}
@@ -48,23 +45,15 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 		double eachCellYWidth = (r.getHeight()/arr.length);
 		
 		g2d = (Graphics2D) g.create();
-		g2d.setColor(Color.GRAY);
+		g2d.setColor(Color.BLACK);
 		g2d.setStroke(new BasicStroke(1));
-		g2d.setColor(Color.GREEN);
-		g2d.setStroke(new BasicStroke(1));
-		
-		
-		
 		
 		for (int y=0; y<arr.length; y++) {
 			for (int x=0; x<arr[0].length; x++) {
 				//Draw the rectangles
-				g2d.setColor(Color.BLACK);
-				g2d.setStroke(new BasicStroke(1));
 				g2d.drawRect((int)(x*eachCellXWidth), (int)(y*eachCellYWidth), (int)(eachCellXWidth), (int)(eachCellYWidth));
 				//Draw oval when needed
 				if (arr[y][x]) {
-					g2d.setColor(Color.BLACK);
 					g2d.fillOval((int)(x*eachCellXWidth), (int)(y*eachCellYWidth), (int)(eachCellXWidth), (int)(eachCellYWidth));
 
 				}
@@ -83,26 +72,20 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		Dimension temp = convertPointToCoordinate(e.getX(), e.getY());
-		System.out.println("Someone clicked the screen, we predict it to be :");
-		System.out.println("X: " + temp.width + ", Y: " + temp.height);
 		notifyObservers("button_clicked", temp.width, temp.height);
 		//TODO dont use dimensions make a new class
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mousePressed(MouseEvent e) {}
+	
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseReleased(MouseEvent e) {}
+	
+	@Override
+	public void mouseExited(MouseEvent e) {}
+	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		//System.out.println("mouse entered" + e.getX());
@@ -117,12 +100,6 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 		
 	}
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void addObserver(GridVisualizerWidgetObserver o) { observers.add(o); }
 	public void removeObserver(GridVisualizerWidgetObserver o) { observers.remove(o); }
 	public void notifyObservers(String action, int x, int y) {

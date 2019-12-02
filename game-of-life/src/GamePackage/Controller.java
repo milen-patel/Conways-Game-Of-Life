@@ -18,20 +18,15 @@ public class Controller implements ModelObserver, ViewObserver{
 		view.addViewObserver(this);
 	}
 
-	
-
 	@Override
 	public void resetButtonClicked() {
 		System.out.println("Observer sees that reset button was clicked");
-		System.out.println("Resetting model");
-		model.reset();
-		
+		model.resetBoard();		
 	}
 
 	@Override
 	public void spotClicked(int x, int y) {
 		System.out.println("View has notified controller that a spot has been clicked");
-		System.out.println("Controller notifying the model");
 		model.toggleSpot(x, y);
 		System.out.println("The clicked spot has # neighbors: " + model.getNumNeighbors(x, y));
 	}
@@ -45,24 +40,20 @@ public class Controller implements ModelObserver, ViewObserver{
 	@Override
 	/* Observable method for the Model */
 	public void spotChanged() {
-		//Model tells us that a spot has changed, we tell view to repaint
+		/* Model tells us that a spot has changed, we tell view to repaint */
 		view.updateDisplay(this.model);
 	}
 
 	@Override
 	/* Observable method for the Model */
 	public void newBoardSize() {
-		view.regenerateModel(this.model);
+		view.updateDisplay(this.model);
 	}
-
-
 
 	@Override
 	public void randomizeBoard() {
 		model.randomizeBoard();
 	}
-
-
 
 	@Override
 	public void nextMove() {
@@ -73,21 +64,16 @@ public class Controller implements ModelObserver, ViewObserver{
 	public void changeThresholdsRequest(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax) {
 		try {
 			model.changeThresholds(newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
-
 		} catch (Exception e) {
 			System.out.println(e);
 			 JOptionPane.showMessageDialog(null, "Bad threshold dimensions entered. No changes will be made.");
 		}
 	}
 
-
-
 	@Override
 	public void showThresholds() {
         JOptionPane.showMessageDialog(null, "Minimum Survival: " + model.getSurviveThresholdLow() + "\nMaximum Survival:" + model.getSurviveThresholdHigh() + "\nMinimum Birth: " + model.getBirthThresholdLow() + "\nMaximum Birth: " + model.getBirthThresholdHigh(), "Current Thresholds", JOptionPane.INFORMATION_MESSAGE);
 	}
-
-
 
 	@Override
 	public void toggleTorus() {
@@ -114,9 +100,6 @@ public class Controller implements ModelObserver, ViewObserver{
 			isAutoRunning = true;
 			currentThread = new BackgroundRunner(this.model, pauseTime);
 			currentThread.start();
-		}
-		
+		}	
 	}
-	
-	
 }

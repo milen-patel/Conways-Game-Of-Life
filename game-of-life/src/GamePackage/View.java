@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
-public class View extends JPanel implements ActionListener, GridVisualizerWidgetObserver{
+public class View extends JPanel implements ActionListener, GridVisualizerWidgetObserver {
 	/* Define instance variables */
 	private List<ViewObserver> observers;
 	private JButton resetButton;
@@ -29,8 +29,9 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	private JButton getThresholdsButton;
 	private JButton toggleTorusButton;
 	private JButton togglePlayButton;
-	private GridVisualizerWidget x;
+	private GridVisualizerWidget displayWidget;
 	GridBagConstraints c;
+	
 	/* Define Constructor */
 	public View () {
 		/* Handle observer */
@@ -40,6 +41,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	    c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		this.setPreferredSize(new Dimension(1000, 1000));
+		
 		/* Add reset button */
 		resetButton = new JButton("Reset");
 		resetButton.setActionCommand("reset");
@@ -47,6 +49,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 0;
 		c.gridy = 0;
 		this.add(resetButton, c);
+		
 		/* Add Resize Button */
 		resizeBoardButton = new JButton("Resize Board");
 		resizeBoardButton.setActionCommand("resize");
@@ -54,6 +57,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 1;
 		c.gridy = 0;
 		this.add(resizeBoardButton, c);
+		
 		/* Add randomize board button */
 		randomizeBoardButton = new JButton("Randomize Board");
 		randomizeBoardButton.setActionCommand("randomize");
@@ -61,6 +65,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 2;
 		c.gridy = 0;
 		this.add(randomizeBoardButton, c);
+		
 		/* Add next move button */
 		nextMoveButton = new JButton("Next Move");
 		nextMoveButton.setActionCommand("nextMove");
@@ -68,6 +73,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 3;
 		c.gridy = 0;
 		this.add(nextMoveButton, c);
+		
 		/* Add get threshold button */
 		getThresholdsButton = new JButton("See Thresholds");
 		getThresholdsButton.setActionCommand("getThresholds");
@@ -75,6 +81,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx=0;
 		c.gridy=1;
 		this.add(getThresholdsButton, c);
+		
 		/* Add change threshold button */
 		changeThresholdsButton = new JButton("Change Thresholds");
 		changeThresholdsButton.setActionCommand("changeThresholds");
@@ -82,6 +89,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 1;
 		c.gridy = 1;
 		this.add(changeThresholdsButton, c);
+		
 		/* Add torus button */
 		toggleTorusButton = new JButton("Torus On/Off");
 		toggleTorusButton.setActionCommand("toggleTorus");
@@ -89,6 +97,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 2;
 		c.gridy = 1;
 		this.add(toggleTorusButton, c);
+		
 		/* Add pause/play button */
 		togglePlayButton = new JButton("Play/Pause");
 		togglePlayButton.setActionCommand("togglePlay");
@@ -96,19 +105,17 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 3;
 		c.gridy = 1;
 		this.add(togglePlayButton, c);
-		/* Add Spot Board */
+		
+		/* Add Board Visualizer Widget */
 		c.gridx = 0;
 		c.gridy = 2;
 		c.gridwidth = 4;
-		c.anchor = GridBagConstraints.PAGE_END; //bottom of space
-		System.out.println("Width:" + getWidth());
-		System.out.println("Height:" + getHeight());
-		x = new GridVisualizerWidget();
-		x.setPreferredSize(new Dimension(1000,800));
-		x.repaint(new boolean[10][10]);
-		x.addObserver(this);
-		this.add(x, c);
-		x.repaint();
+		c.anchor = GridBagConstraints.PAGE_END; 
+		displayWidget = new GridVisualizerWidget();
+		displayWidget.setPreferredSize(new Dimension(1000,800));
+		displayWidget.repaint(new boolean[10][10]);
+		displayWidget.addObserver(this);
+		this.add(displayWidget, c);
 		
 	}
 	
@@ -184,58 +191,17 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		} else if (e.getActionCommand().contentEquals("togglePlay")) {
 			notifyObservers("togglePlay");
 		}
-		
 	}
 
-	//@Override
-	//public void spotClicked(Spot spot) {
-	//	// TODO Auto-generated method stub
-	//	notifyObservers("spot clicked", spot);
-
-	//}
-
-	//@Override
-	//public void spotEntered(Spot spot) {
-	//	spot.highlightSpot();	
-	//}
-
-	//@Override
-	//public void spotExited(Spot spot) {
-	//	spot.unhighlightSpot();
-		// TODO Auto-generated method stub
-		
-	//}
-	
+	/* Repaints the display by using the displayWidget method */
 	public void updateDisplay(Model model) {
-		System.out.println("Repainting display");
-		//Loop over the entire JSpotBoard
-		//for (Spot s: cellBoard) {
-		//	if (model.getIsSpotAlive(s.getSpotX(), s.getSpotY())) {
-		//		cellBoard.getSpotAt(s.getSpotX(), s.getSpotY()).setSpot();
-		//	} else {
-		//		cellBoard.getSpotAt(s.getSpotX(), s.getSpotY()).clearSpot();
-		//	}
-		//}
-		x.repaint(model.getBoard());
-	//	this.revalidate();
-	//	this.repaint();
+		displayWidget.repaint(model.getBoard());
 	}
 
-	public void regenerateModel(Model model) {
-		//this.remove(cellBoard);
-		//cellBoard = new JSpotBoard(model.getCurrentXSize()+1,model.getCurrentYSize()+1);
-		//this.add(cellBoard, c);
-		//cellBoard.addSpotListener(this);
-		//cellBoard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
-		//updateDisplay(model);
-		x.repaint(model.getBoard());
-	}
-
+	/* Implementation of GridVisualizerWidgetObserver */
 	@Override
 	public void buttonClicked(int x, int y) {
 		notifyObservers("spot clicked", x, y);
 	}
-	
- 
 	
 }
