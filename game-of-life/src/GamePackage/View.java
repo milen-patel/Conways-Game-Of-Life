@@ -203,7 +203,6 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	public void ShowThresholdPopup(int surviveThresholdLow, int surviveThresholdHigh, int birthThresholdLow,
 			int birthThresholdHigh) {
         JOptionPane.showMessageDialog(null, "Minimum Survival: " + surviveThresholdLow + "\nMaximum Survival:" + surviveThresholdHigh + "\nMinimum Birth: " + birthThresholdLow + "\nMaximum Birth: " + birthThresholdHigh, "Current Thresholds", JOptionPane.INFORMATION_MESSAGE);
-		
 	}
 
 	public void showInvalidInputMessage() {
@@ -212,6 +211,10 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 
 	public double getThreadDurationPrompt() {
 		return Double.parseDouble(JOptionPane.showInputDialog(null,"Enter thread duration between 10-1000 ms"));
+	}
+
+	public static void showCannotResizeBoardWhilePlayingError() {
+		JOptionPane.showMessageDialog(null, "You cannot resize the board while the simulation is playing!", "Error", JOptionPane.INFORMATION_MESSAGE);		
 	}
 	
 }

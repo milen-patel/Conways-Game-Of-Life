@@ -70,9 +70,8 @@ public class Controller implements ModelObserver, ViewObserver{
 		} else if (e.equals(ViewObserver.ViewEvent.newBoardSizeRequestClicked)) {
 			/* Stop a thread from running if it is */
 			if (isAutoRunning) {
-				currentThread.terminate();
-				currentThread = null;
-				isAutoRunning = false;
+				view.showCannotResizeBoardWhilePlayingError();
+				return;
 			}
 			model.changeBoardSize(x, y);
 		} 
