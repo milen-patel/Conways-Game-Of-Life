@@ -42,9 +42,6 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 		
 		double eachCellXWidth =  (r.getWidth()/arr[0].length);
 		double eachCellYWidth =  (r.getHeight()/arr.length);
-		//System.out.println("Widget will use x width: " + eachCellXWidth * arr[0].length);
-		//System.out.println("Widget will use y height: " + eachCellYWidth * arr.length);
-		//System.out.println("Widget has potential to use width: " + r.getWidth() + ", height: " + r.getHeight());
 		g2d = (Graphics2D) g.create();
 		g2d.setColor(Color.BLACK);
 		g2d.setStroke(new BasicStroke(1));

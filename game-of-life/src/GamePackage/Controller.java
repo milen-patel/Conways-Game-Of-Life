@@ -1,8 +1,5 @@
 package GamePackage;
 
-import javax.swing.JOptionPane;
-
-
 public class Controller implements ModelObserver, ViewObserver{
 	/* Instance variables */
 	private Model model;
@@ -66,22 +63,21 @@ public class Controller implements ModelObserver, ViewObserver{
 			model.changeThresholds(newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
 		} catch (Exception e) {
 			System.out.println(e);
-			 JOptionPane.showMessageDialog(null, "Bad threshold dimensions entered. No changes will be made.");
+			this.view.giveBadDimensionError();
 		}
 	}
 
 	@Override
 	public void showThresholds() {
-        JOptionPane.showMessageDialog(null, "Minimum Survival: " + model.getSurviveThresholdLow() + "\nMaximum Survival:" + model.getSurviveThresholdHigh() + "\nMinimum Birth: " + model.getBirthThresholdLow() + "\nMaximum Birth: " + model.getBirthThresholdHigh(), "Current Thresholds", JOptionPane.INFORMATION_MESSAGE);
+		this.view.ShowThresholdPopup(model.getSurviveThresholdLow(), model.getSurviveThresholdHigh(), model.getBirthThresholdLow(), model.getBirthThresholdHigh());
 	}
 
 	@Override
 	public void toggleTorus() {
 		if (model.toggleTorus())
-			JOptionPane.showMessageDialog(null, "Torus mode is now on", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);
+			view.showTorusModeOn();
 		else
-			JOptionPane.showMessageDialog(null, "Torus mode is now off", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);
-		//TODO: Make the view handle the JOption panes
+			view.showTorusModeOff();
 	}
 
 	@Override
@@ -92,9 +88,9 @@ public class Controller implements ModelObserver, ViewObserver{
 			isAutoRunning = false;
 			return;
 		} else {
-			double pauseTime = Double.parseDouble(JOptionPane.showInputDialog(null,"Enter thread duration between 10-1000 ms"));
+			double pauseTime = view.getThreadDurationPrompt();
 			if (pauseTime < 10 || pauseTime > 1000) {
-				JOptionPane.showMessageDialog(null, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);
+				this.view.showInvalidInputMessage();
 				return;
 			}
 			isAutoRunning = true;

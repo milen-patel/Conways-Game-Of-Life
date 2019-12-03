@@ -1,18 +1,14 @@
 package GamePackage;
 
-import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -202,6 +198,32 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	@Override
 	public void buttonClicked(int x, int y) {
 		notifyObservers("spot clicked", x, y);
+	}
+
+	public void giveBadDimensionError() {
+		 JOptionPane.showMessageDialog(null, "Bad threshold dimensions entered. No changes will be made.");		
+	}
+
+	public void showTorusModeOn() {
+		JOptionPane.showMessageDialog(null, "Torus mode is now on", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);		
+	}
+
+	public void showTorusModeOff() {
+		JOptionPane.showMessageDialog(null, "Torus mode is now off", "Torus Mode", JOptionPane.INFORMATION_MESSAGE);		
+	}
+
+	public void ShowThresholdPopup(int surviveThresholdLow, int surviveThresholdHigh, int birthThresholdLow,
+			int birthThresholdHigh) {
+        JOptionPane.showMessageDialog(null, "Minimum Survival: " + surviveThresholdLow + "\nMaximum Survival:" + surviveThresholdHigh + "\nMinimum Birth: " + birthThresholdLow + "\nMaximum Birth: " + birthThresholdHigh, "Current Thresholds", JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+
+	public void showInvalidInputMessage() {
+		JOptionPane.showMessageDialog(null, "Invalid Input!", "Error", JOptionPane.INFORMATION_MESSAGE);		
+	}
+
+	public double getThreadDurationPrompt() {
+		return Double.parseDouble(JOptionPane.showInputDialog(null,"Enter thread duration between 10-1000 ms"));
 	}
 	
 }
