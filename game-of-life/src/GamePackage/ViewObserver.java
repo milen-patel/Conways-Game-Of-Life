@@ -1,22 +1,15 @@
 package GamePackage;
 
-
 public interface ViewObserver {
-	public void resetButtonClicked();
 
-	public void spotClicked(int x, int y);
+	public enum ViewEvent {
+		resetButtonClicked, spotClicked, newBoardSizeRequestClicked, randomizeBoardClicked, nextMoveClicked,
+		changeThresholdClicked, showThresholdsClicked, toggleTorusClicked, togglePlayClicked
+	};
 
-	public void newBoardSizeRequested(int newXSize, int newYSize);
-
-	public void randomizeBoard();
-
-	public void nextMove();
-
-	public void changeThresholdsRequest(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax);
-
-	public void showThresholds();
-
-	public void toggleTorus();
-
-	public void togglePlay();
+	public void handleViewEvent(ViewEvent e);
+	// For spotClicked, newBoardSizeRequested
+	public void handleViewEvent(ViewEvent e, int x, int y);
+	// For changeThresholdRequest
+	public void handleViewEvent(ViewEvent e, int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax);
 }

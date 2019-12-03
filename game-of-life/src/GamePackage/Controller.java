@@ -16,25 +16,6 @@ public class Controller implements ModelObserver, ViewObserver{
 	}
 
 	@Override
-	public void resetButtonClicked() {
-		System.out.println("Observer sees that reset button was clicked");
-		model.resetBoard();		
-	}
-
-	@Override
-	public void spotClicked(int x, int y) {
-		System.out.println("View has notified controller that a spot has been clicked at (" + x +", " + y + ")");
-		model.toggleSpot(x, y);
-		System.out.println("The clicked spot has # neighbors: " + model.getNumNeighbors(x, y));
-	}
-
-	@Override
-	public void newBoardSizeRequested(int newXSize, int newYSize) {
-		model.changeBoardSize(newXSize, newYSize);
-		System.out.println("Controller requesting new board size");
-	}
-
-	@Override
 	/* Observable method for the Model */
 	public void spotChanged() {
 		/* Model tells us that a spot has changed, we tell view to repaint */
@@ -48,54 +29,66 @@ public class Controller implements ModelObserver, ViewObserver{
 	}
 
 	@Override
-	public void randomizeBoard() {
-		model.randomizeBoard();
-	}
-
-	@Override
-	public void nextMove() {
-		model.makeNextMove();
-	}
-
-	@Override
-	public void changeThresholdsRequest(int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax) {
-		try {
-			model.changeThresholds(newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
-		} catch (Exception e) {
-			System.out.println(e);
-			this.view.giveBadDimensionError();
-		}
-	}
-
-	@Override
-	public void showThresholds() {
-		this.view.ShowThresholdPopup(model.getSurviveThresholdLow(), model.getSurviveThresholdHigh(), model.getBirthThresholdLow(), model.getBirthThresholdHigh());
-	}
-
-	@Override
-	public void toggleTorus() {
-		if (model.toggleTorus())
-			view.showTorusModeOn();
-		else
-			view.showTorusModeOff();
-	}
-
-	@Override
-	public void togglePlay() {
-		if (isAutoRunning) {
-			currentThread.terminate();
-			currentThread = null;
-			isAutoRunning = false;
-			return;
-		} else {
-			double pauseTime = view.getThreadDurationPrompt();
-			if (pauseTime < 10 || pauseTime > 1000) {
-				this.view.showInvalidInputMessage();
+	public void handleViewEvent(ViewEvent e) {
+		if (e.equals(ViewEvent.togglePlayClicked)) {
+			if (isAutoRunning) {
+				currentThread.terminate();
+				currentThread = null;
+				isAutoRunning = false;
 				return;
+			} else {
+				double pauseTime = view.getThreadDurationPrompt();
+				if (pauseTime < 10 || pauseTime > 1000) {
+					this.view.showInvalidInputMessage();
+					return;
+				}
+				isAutoRunning = true;
+				currentThread = new BackgroundRunner(this.model, pauseTime);
+				currentThread.start();
 			}
-			isAutoRunning = true;
-			currentThread = new BackgroundRunner(this.model, pauseTime);
-			currentThread.start();
-		}	
+		} else if (e.equals(ViewEvent.toggleTorusClicked)) {
+			if (model.toggleTorus())
+				view.showTorusModeOn();
+			else
+				view.showTorusModeOff();
+		} else if (e.equals(ViewEvent.showThresholdsClicked)) {
+			this.view.ShowThresholdPopup(model.getSurviveThresholdLow(), model.getSurviveThresholdHigh(), model.getBirthThresholdLow(), model.getBirthThresholdHigh());
+		} else if (e.equals(ViewEvent.nextMoveClicked)) {
+			model.makeNextMove();
+		} else if (e.equals(ViewEvent.resetButtonClicked)) {
+			model.resetBoard();
+		} else if (e == (ViewEvent.randomizeBoardClicked)) {
+			model.randomizeBoard();
+		}
+		
+	}
+
+	@Override
+	public void handleViewEvent(ViewEvent e, int x, int y) {
+		if (e.equals(ViewObserver.ViewEvent.spotClicked)) {
+			model.toggleSpot(x, y);
+		} else if (e.equals(ViewObserver.ViewEvent.newBoardSizeRequestClicked)) {
+			/* Stop a thread from running if it is */
+			if (isAutoRunning) {
+				currentThread.terminate();
+				currentThread = null;
+				isAutoRunning = false;
+			}
+			model.changeBoardSize(x, y);
+		} 
+		System.out.println(e);
+		System.out.println(ViewEvent.randomizeBoardClicked);
+	}
+
+	@Override
+	public void handleViewEvent(ViewEvent e, int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax) {
+		if (e.equals(ViewEvent.changeThresholdClicked)) {
+			try {
+				model.changeThresholds(newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
+			} catch (Exception excep) {
+				System.out.println(excep);
+				this.view.giveBadDimensionError();
+			}
+		}
 	}
 }

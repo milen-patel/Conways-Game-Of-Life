@@ -8,10 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import GamePackage.ViewObserver.ViewEvent;
 
 
 public class View extends JPanel implements ActionListener, GridVisualizerWidgetObserver {
@@ -118,74 +121,60 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	/* Observer methods */
 	public void addViewObserver(ViewObserver o) { this.observers.add(o); }
 	public void removeViewObserver(ViewObserver o) { this.observers.remove(o); }
-	public void notifyObservers(String action) {
-		for (ViewObserver o : observers) {
-			if (action.equals("ResetButton")) {
-				o.resetButtonClicked();
-			} else if (action.contentEquals("ResizeBoard")) {
-				System.out.println("Board Resize Requested");
-				 try {
-				 int newXSize = Integer.parseInt(JOptionPane.showInputDialog(null, "X Value"));
-				 int newYSize = Integer.parseInt(JOptionPane.showInputDialog(null, "Y Value"));
-				 if (newXSize < 10 || newYSize < 10 || newXSize > 500 || newYSize > 500) {throw new RuntimeException();}
-				 o.newBoardSizeRequested(newXSize, newYSize);
-				 } catch (Exception e) {
-					 JOptionPane.showMessageDialog(null, "Bad resizable board dimensions entered. No changes will be made.");
-					 return;
-				 }
-				 
-			} else if (action.contentEquals("RandomizeBoard")) {
-				o.randomizeBoard();
-			} else if (action.contentEquals("NextMove")) {
-				o.nextMove();
-			} else if (action.contentEquals("changeThresholds")) {
-				try {
-					int newSurviveMin = Integer.parseInt(JOptionPane.showInputDialog(null, "Survival Minimum"));
-					int newSurviveMax = Integer.parseInt(JOptionPane.showInputDialog(null, "Survival Maximum"));
-					int newBirthMin = Integer.parseInt(JOptionPane.showInputDialog(null, "Birth Minimum"));
-					int newBirthMax = Integer.parseInt(JOptionPane.showInputDialog(null, "Birth Maximum"));
-					o.changeThresholdsRequest(newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
-				} catch (Exception e) {
-					System.out.println(e);
-					 JOptionPane.showMessageDialog(null, "Bad threshold dimensions entered. No changes will be made.");
-					 return;
-				}
-			} else if (action.contentEquals("showThresholds")) {
-				o.showThresholds();
-			} else if (action.contentEquals("toggleTorus")) {
-				o.toggleTorus();
-			} else if (action.contentEquals("togglePlay")) {
-				o.togglePlay();
-			}
+	public void notifyObservers(ViewObserver.ViewEvent e) {
+		for (ViewObserver o: observers) {
+			o.handleViewEvent(e);
 		}
 	}
-	
-	public void notifyObservers(String action, int x, int y) {
+	public void notifyObservers(ViewObserver.ViewEvent e, int x, int y) {
 		for (ViewObserver o : observers) {
-			if (action.equals("spot clicked")) {
-				o.spotClicked(x, y);
-			} 
+			o.handleViewEvent(e, x, y);
+		}
+	}
+	public void notifyObservers(ViewEvent e, int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax) {
+		for (ViewObserver o : observers) {
+			o.handleViewEvent(e, newSurviveMin, newSurviveMax, newBirthMin, newBirthMax);
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().contentEquals("reset")) {
-			notifyObservers("ResetButton");
+			notifyObservers(ViewEvent.resetButtonClicked);
 		} else if (e.getActionCommand().equals("resize")) {
-			notifyObservers("ResizeBoard");
+			try {
+				int newXSize = Integer.parseInt(JOptionPane.showInputDialog(null, "X Value"));
+				int newYSize = Integer.parseInt(JOptionPane.showInputDialog(null, "Y Value"));
+				if (newXSize < 10 || newYSize < 10 || newXSize > 500 || newYSize > 500) {
+					throw new RuntimeException();
+				}
+				notifyObservers(ViewEvent.newBoardSizeRequestClicked, newXSize, newYSize);
+			} catch (Exception excep) {
+				JOptionPane.showMessageDialog(null, "Bad resizable board dimensions entered. No changes will be made.");
+				return;
+			}
 		} else if (e.getActionCommand().contentEquals("randomize")) {
-			notifyObservers("RandomizeBoard");
+			notifyObservers(ViewEvent.randomizeBoardClicked);
 		} else if (e.getActionCommand().contentEquals("nextMove")) {
-			notifyObservers("NextMove");
+			notifyObservers(ViewEvent.nextMoveClicked);
 		} else if (e.getActionCommand().contentEquals("changeThresholds")) {
-			notifyObservers("changeThresholds");
+			try {
+				int newSurviveMin = Integer.parseInt(JOptionPane.showInputDialog(null, "Survival Minimum"));
+				int newSurviveMax = Integer.parseInt(JOptionPane.showInputDialog(null, "Survival Maximum"));
+				int newBirthMin = Integer.parseInt(JOptionPane.showInputDialog(null, "Birth Minimum"));
+				int newBirthMax = Integer.parseInt(JOptionPane.showInputDialog(null, "Birth Maximum"));
+				notifyObservers(ViewEvent.changeThresholdClicked, newSurviveMin, newSurviveMax, newBirthMin,
+						newBirthMax);
+			} catch (Exception excep) {
+				JOptionPane.showMessageDialog(null, "Bad threshold dimensions entered. No changes will be made.");
+				return;
+			}
 		} else if (e.getActionCommand().contentEquals("getThresholds")) {
-			notifyObservers("showThresholds");
+			notifyObservers(ViewEvent.showThresholdsClicked);
 		} else if (e.getActionCommand().contentEquals("toggleTorus")) {
-			notifyObservers("toggleTorus");
+			notifyObservers(ViewEvent.toggleTorusClicked);
 		} else if (e.getActionCommand().contentEquals("togglePlay")) {
-			notifyObservers("togglePlay");
+			notifyObservers(ViewEvent.togglePlayClicked);
 		}
 	}
 
@@ -197,7 +186,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	/* Implementation of GridVisualizerWidgetObserver */
 	@Override
 	public void buttonClicked(int x, int y) {
-		notifyObservers("spot clicked", x, y);
+		notifyObservers(ViewEvent.spotClicked, x, y);
 	}
 
 	public void giveBadDimensionError() {
