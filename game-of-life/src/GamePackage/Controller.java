@@ -75,8 +75,7 @@ public class Controller implements ModelObserver, ViewObserver{
 			}
 			model.changeBoardSize(x, y);
 		} 
-		System.out.println(e);
-		System.out.println(ViewEvent.randomizeBoardClicked);
+		
 	}
 
 	@Override

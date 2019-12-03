@@ -17,7 +17,8 @@ public class Model {
 	private int birthThresholdLow;
 	private int birthThresholdHigh;
 	private boolean isTorus;
-	
+	private int population;
+	private int stepNumber;
 	/* Create a constructor */
 	public Model() {
 		/* Instantiate 2d-array */
@@ -41,8 +42,9 @@ public class Model {
 	public int getSurviveThresholdHigh() { return surviveThresholdHigh; }
 	public int getBirthThresholdLow() { return birthThresholdLow; }
 	public int getBirthThresholdHigh() { return birthThresholdHigh; }
-	public boolean getIsTorus() { return isTorus; }
 	public boolean[][] getBoard() { return this.gridModel.clone(); }
+	public int getPopulation() { return this.population; }
+	public int getStepNumber() { return this.stepNumber; }
 	
 	/* Returns if the spot is alive
 	 * (x,y) is a spot in the array itself
@@ -61,18 +63,25 @@ public class Model {
 		if (newX < 10 || newX > 500 || newY < 10 || newY > 500) {
 			throw new RuntimeException("Invalid board dimensions");
 		}
-		
+		this.population = 0;
 		/* Reset all the pieces on the board */
 		gridModel = new boolean[newY][newX];
 		
 		/* Notify observers */
+		stepNumber = 0;
 		notifyObservers("newBoardSize");
 	}
 	
 	/* Toggles the spot located at (x,y) */
 	public void toggleSpot(int x, int y) {
+		
 		/* Swap spot */
 		gridModel[y][x] = !gridModel[y][x];
+		
+		if (gridModel[y][x])
+			this.population++;
+		else
+			this.population--;
 		
 		/* Notify Observers */
 		notifyObservers("spot_changed");
@@ -88,6 +97,7 @@ public class Model {
 				//1. Any live cell with fewer than two live neighbors dies, as if by under-population.
 				if (getIsSpotAlive(x,y) && getNumNeighbors(x,y)<this.surviveThresholdLow) {
 					arr[y][x] = false;
+					population--;
 					continue;
 				}
 				//2. Any live cell with two or three live neighbors lives on to the next generation.
@@ -98,16 +108,18 @@ public class Model {
 				//3. Any live cell with more than three live neighbors dies, as if by over-population.
 				if (getIsSpotAlive(x,y) && getNumNeighbors(x,y)>this.surviveThresholdHigh) {
 					arr[y][x] = false;
+					population--;
 					continue;
 				}
 				//4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
 				if (!getIsSpotAlive(x,y) && getNumNeighbors(x,y)>=this.birthThresholdLow && getNumNeighbors(x,y)<=this.birthThresholdHigh) {
 					arr[y][x] = true;
+					population++;
 					continue;
 				}				
 			}
 		}
-		
+		this.stepNumber++;
 		/* Change instance variable */
 		this.gridModel = arr;
 		
@@ -116,15 +128,18 @@ public class Model {
 	}
 	
 	
-	public void randomizeBoard() {
+	public synchronized void randomizeBoard() {
 		/* Start by resetting the board */
 		this.gridModel = new boolean[this.gridModel.length][this.gridModel[0].length];
+		this.population = 0;
+		this.stepNumber = 0;
 		
 		/* Now loop over the board and randomize it */
 		for (int y=0; y < this.gridModel.length; y++) {
 			for (int x=0; x < this.gridModel[y].length; x++) {
 				if (Math.random() >= 0.50) {
 					this.gridModel[y][x] = true;
+					population++;
 				}
 			}
 		}
@@ -134,6 +149,7 @@ public class Model {
 	}
 
 	public void resetBoard() {
+		this.population = 0;
 		for(int y=0; y<gridModel.length;y++) {
 			for(int x=0; x<gridModel[0].length; x++) {
 				gridModel[y][x] = false;
@@ -235,4 +251,6 @@ public class Model {
 		this.isTorus = !this.isTorus;
 		return this.isTorus;
 	}
+	
+	
 }

@@ -25,6 +25,10 @@ public class BackgroundRunner extends Thread {
 	public void terminate() {
 		isDone = true;
 	}
+	
+	public double getPauseDuration() {
+		return this.pauseDuration;
+	}
 
 	public void run() {
 		/* Loop indefinetly, while possible */

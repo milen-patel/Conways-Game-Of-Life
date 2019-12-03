@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -28,6 +29,9 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 	private JButton toggleTorusButton;
 	private JButton togglePlayButton;
 	private GridVisualizerWidget displayWidget;
+	private JLabel populationLabel;
+	private JLabel stepNumberLabel;
+	
 	GridBagConstraints c;
 	
 	/* Define Constructor */
@@ -108,13 +112,26 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		c.gridx = 0;
 		c.gridy = 2;
 		c.gridwidth = 4;
-		c.anchor = GridBagConstraints.PAGE_END; 
 		displayWidget = new GridVisualizerWidget();
 		displayWidget.setPreferredSize(new Dimension(1000,800));
 		displayWidget.repaint(new boolean[10][10]);
 		displayWidget.addObserver(this);
 		this.add(displayWidget, c);
 		
+		/* Add population label */
+		c.anchor = GridBagConstraints.PAGE_END; 
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		populationLabel = new JLabel("Population: 0");
+		this.add(populationLabel, c);
+		
+		/* Add stepNumberLabel */
+		c.gridx = 3;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		stepNumberLabel = new JLabel("Step: 0");
+		this.add(stepNumberLabel, c);
 	}
 	
 	/* Observer methods */
@@ -179,7 +196,10 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 
 	/* Repaints the display by using the displayWidget method */
 	public void updateDisplay(Model model) {
+		populationLabel.setText("Population: " + model.getPopulation());
+		stepNumberLabel.setText("Step: " + model.getStepNumber());
 		displayWidget.repaint(model.getBoard());
+		
 	}
 
 	/* Implementation of GridVisualizerWidgetObserver */

@@ -8,12 +8,13 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
-public class GridVisualizerWidget extends JPanel implements MouseListener {
+public class GridVisualizerWidget extends JPanel implements MouseListener, MouseMotionListener {
 	private boolean[][] arr;
 	private List<GridVisualizerWidgetObserver> observers;
 
@@ -100,6 +101,38 @@ public class GridVisualizerWidget extends JPanel implements MouseListener {
 				o.buttonClicked(x, y);
 			}
 		}
+	}
+
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		Dimension temp = convertPointToCoordinate(e.getX(), e.getY());
+		if (temp.width < 0 || temp.height < 0 || temp.width >= arr[0].length || temp.height >= arr.length)
+			return; 
+		Rectangle r = getBounds();
+		
+		double eachCellXWidth =  (r.getWidth()/arr[0].length);
+		double eachCellYWidth =  (r.getHeight()/arr.length);
+		
+		g2d.setColor(Color.YELLOW);
+		g2d.drawRect((int)(temp.width+2*eachCellXWidth), (int)(temp.height*eachCellYWidth), (int)(eachCellXWidth), (int)(eachCellYWidth));
+		
+	}
+
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		Dimension temp = convertPointToCoordinate(e.getX(), e.getY());
+		if (temp.width < 0 || temp.height < 0 || temp.width >= arr[0].length || temp.height >= arr.length)
+			return; 
+		Rectangle r = getBounds();
+		
+		double eachCellXWidth =  (r.getWidth()/arr[0].length);
+		double eachCellYWidth =  (r.getHeight()/arr.length);
+		
+		g2d.setColor(Color.YELLOW);
+		g2d.drawRect((int)(temp.width+2*eachCellXWidth), (int)(temp.height*eachCellYWidth), (int)(eachCellXWidth), (int)(eachCellYWidth));
+		
 	}
 	
 
