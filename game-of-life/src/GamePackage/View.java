@@ -213,7 +213,7 @@ public class View extends JPanel implements ActionListener, GridVisualizerWidget
 		return Double.parseDouble(JOptionPane.showInputDialog(null,"Enter thread duration between 10-1000 ms"));
 	}
 
-	public static void showCannotResizeBoardWhilePlayingError() {
+	public void showCannotResizeBoardWhilePlayingError() {
 		JOptionPane.showMessageDialog(null, "You cannot resize the board while the simulation is playing!", "Error", JOptionPane.INFORMATION_MESSAGE);		
 	}
 	
