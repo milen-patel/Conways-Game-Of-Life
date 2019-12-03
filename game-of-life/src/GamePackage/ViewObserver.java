@@ -12,5 +12,4 @@ public interface ViewObserver {
 	public void handleViewEvent(ViewEvent e, int x, int y);
 	// For changeThresholdRequest
 	public void handleViewEvent(ViewEvent e, int newSurviveMin, int newSurviveMax, int newBirthMin, int newBirthMax);
-	//test
 }
