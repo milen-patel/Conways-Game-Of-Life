@@ -2,7 +2,6 @@ package GamePackage;
 // TODO: Make 'Event' based classes instead of just passing strings
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Model {
