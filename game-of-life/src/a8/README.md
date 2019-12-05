@@ -1,4 +1,4 @@
-**Execute the GameRunner.java class to create a new instance of the simulation**
+**Execute the GameOfLife.java class to create a new instance of the simulation**
 
 I have provided all the implementation as requested on the Sakai.  
 -By default, there is a 10x10 grid. 
