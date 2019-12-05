@@ -1,4 +1,4 @@
-package GamePackage;
+package a8;
 
 public class Controller implements ModelObserver, ViewObserver{
 	/* Instance variables */
@@ -60,7 +60,6 @@ public class Controller implements ModelObserver, ViewObserver{
 		} else if (e == (ViewEvent.randomizeBoardClicked)) {
 			model.randomizeBoard();
 		}
-		
 	}
 
 	@Override

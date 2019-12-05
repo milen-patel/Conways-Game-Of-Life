@@ -1,4 +1,4 @@
-package GamePackage;
+package a8;
 
 
 import java.awt.Dimension;
@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import GamePackage.ViewObserver.ViewEvent;
+import a8.ViewObserver.ViewEvent;
 
 
 public class View extends JPanel implements ActionListener, GridVisualizerWidgetObserver {

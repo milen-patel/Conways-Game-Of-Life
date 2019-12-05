@@ -1,10 +1,10 @@
-package GamePackage;
+package a8;
 
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-public class GameRunner {
+public class GameOfLife {
 
 	public static void main(String[] args) {
 		/* Create all components of MVC Architecture */

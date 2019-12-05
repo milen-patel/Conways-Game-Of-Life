@@ -1,4 +1,4 @@
-package GamePackage;
+package a8;
 
 public class BackgroundRunner extends Thread {
 	

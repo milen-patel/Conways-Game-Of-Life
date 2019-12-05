@@ -1,4 +1,4 @@
-package GamePackage;
+package a8;
 
 public interface GridVisualizerWidgetObserver {
 	/* Method for handling when the GridVisualizerWidget is clicked */

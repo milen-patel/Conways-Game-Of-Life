@@ -1,4 +1,4 @@
-package GamePackage;
+package a8;
 
 public interface ModelObserver {
 	public void spotChanged();
