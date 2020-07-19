@@ -1,12 +1,11 @@
 # Conways-Game-of-Life
 Recreation of Conway's Game of Life using Java Swing
 
-Execute the GameOfLife.java class to create a new instance of the simulation
+Execute the GameOfLife.java class to create a new instance of the simulation. By default, there is a 10x10 grid. Click the 'Resize Board' to change the board to any dimension between (10,10) and (500,500). On many displays, larger boards have performance and rendering issues, board sizes up to 400x400 tend to perform better.
 
 # Features 
 
 <ul>
-<li>By default, there is a 10x10 grid. Click the 'Resize Board' to change the board to any dimension between (10,10) and (500,500).</li>
 <li>Ability to change the size of the field from 10x10 up to 500x500.</li>
 <li>Ability to manually set / clear any cell in order to set up patterns. +Ability to clear the entire field.</li>
 <li>Ability to fill the field randomly.</li>
