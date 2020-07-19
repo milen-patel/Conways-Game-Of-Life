@@ -10,7 +10,11 @@ Execute the GameOfLife.java class to create a new instance of the simulation. By
 <li>Ability to manually set / clear any cell in order to set up patterns. +Ability to clear the entire field.</li>
 <li>Ability to fill the field randomly.</li>
 <li>Ability to advance the game by pressing a button.</li>
-<li>Written with a Model View Controller architecture. +Ability to set the "survive" and "birth" thresholds to custom values.</li>
+<li>Written with a Model View Controller architecture. </li>
+<li>Ability to set the "survive" and "birth" thresholds to custom values.</li>
 <li>Ability to toggle "torus" mode on or off. In torus mode, the field is treated as if it wraps around the edges back to the other edge.</li>
 <li>A start/stop button that advances the game automatically using a separate thread with a delay between updates settable between 10 milliseconds and 1 second.</li>
 </ul>
+
+# Running Simulation!
+![](gameplay.gif)
