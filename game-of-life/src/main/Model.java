@@ -1,4 +1,4 @@
-package a8;
+package main;
 // TODO: Make 'Event' based classes instead of just passing strings
 
 import java.util.ArrayList;

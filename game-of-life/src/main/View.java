@@ -1,4 +1,4 @@
-package a8;
+package main;
 
 
 import java.awt.Dimension;
@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import a8.ViewObserver.ViewEvent;
+import main.ViewObserver.ViewEvent;
 
 
 public class View extends JPanel implements ActionListener, GridVisualizerWidgetObserver {

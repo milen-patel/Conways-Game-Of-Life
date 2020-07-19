@@ -1,4 +1,4 @@
-package a8;
+package main;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

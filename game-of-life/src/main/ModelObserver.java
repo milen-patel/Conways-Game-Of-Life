@@ -1,4 +1,4 @@
-package a8;
+package main;
 
 public interface ModelObserver {
 	public void spotChanged();

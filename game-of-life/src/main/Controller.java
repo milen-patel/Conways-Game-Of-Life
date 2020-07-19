@@ -1,4 +1,4 @@
-package a8;
+package main;
 
 public class Controller implements ModelObserver, ViewObserver{
 	/* Instance variables */

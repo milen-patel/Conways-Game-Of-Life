@@ -1,4 +1,4 @@
-package a8;
+package main;
 
 import java.awt.Dimension;
 
